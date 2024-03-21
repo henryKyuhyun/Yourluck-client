@@ -4,6 +4,7 @@ import Card from "./Card";
 import yourLuckLogo from "../assets/yourlucklogo.png"
 
 
+
 export default function Banner() {
   return(
     <BannerSection>

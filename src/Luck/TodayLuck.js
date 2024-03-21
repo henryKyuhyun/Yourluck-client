@@ -1,30 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-
+import { login } from '../redux/authAction';
+import { useDispatch, useSelector } from 'react-redux';
 
 function TodayLuck() {
-  const [fortune, setFortune] = useState('');
+    const [message, setMessage] = useState('');
+    const dispatch = useDispatch(); // useEffect 바깥으로 이동
+    const token = useSelector((state) => state.auth.token); // 'auth'는 configureStore에서 정의한 리듀서 키입니다.
 
-  useEffect(() => {
-    getTodayLuck();
-  },[]);
+    useEffect(() => {
+        const url = 'http://localhost:8080/api/v1/todayLuck';
 
-  const getTodayLuck = async() => {
-    try{
-      const response = await axios.get('/todayLuck');
-      setFortune(response.data.message); // 백엔드에서 전달받은 메시지를 상태에 저장합니다.
-    }catch(error){
-      console.error("운세를 불러오는데 실패 했습니다" , error);
-    }
-  };
+        if (!token) {
+          dispatch(login(CredentialsContainer));
+        } else {
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`, // 동적 할당으로 수정
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                setMessage(data.message);
+            })
+            .catch(error => {
+                console.error('Error fetching data: ', error);
+            });
+        }
+    }, [token]); // token을 의존성 배열에 추가
 
-  return (
-    <div>
-      <h2>오늘의 운세</h2>
-      <p>{fortune || "운세를 불러오는 중입니다..."}</p>
-    </div>
-
-  );
-};
+    return (
+        <div>
+            <h1>오늘의 운세</h1>
+            <p>{message}</p>
+        </div>
+    );
+}
 
 export default TodayLuck;

@@ -1,6 +1,10 @@
 import { LinkForMenu, LinkWithoutBackground, MenuCenter, MenuNav, MenuRight } from "../styles/BannerStyle";
+import { useSelector } from "react-redux";
 
 export default function MenuBar() {
+
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const user = useSelector(state => state.auth.user);
   return(
     <>
       <MenuNav>
@@ -19,13 +23,19 @@ export default function MenuBar() {
         </MenuCenter>
 
         <MenuRight>
-          <LinkForMenu to="/join" >
-            Register
-          </LinkForMenu>
-          <LinkForMenu to="/login">
-            Sign in
-          </LinkForMenu>
-          </MenuRight>
+        {isAuthenticated ? (
+          <p>{user.username}님 반갑습니다!</p> 
+        ) : (
+          <>
+            <LinkForMenu to="/join">
+              Register
+            </LinkForMenu>
+            <LinkForMenu to="/login">
+              Sign in
+            </LinkForMenu>
+          </>
+        )}
+        </MenuRight>
         </MenuNav>
     </>
   )

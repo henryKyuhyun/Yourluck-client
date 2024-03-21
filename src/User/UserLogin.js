@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { login } from '../redux/authAction';
 import { useNavigate } from 'react-router-dom';
@@ -9,23 +8,16 @@ function UserLogin() {
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:8081/api/v1/users/login', { name, password });
-      console.log(response.data); //응답데이터 출력
-      const { token } = response.data.result;
-      if (token) {
-        localStorage.setItem('token', token);
-        // Redux 상태 관리를 위해 login 액션 디스패치
-        dispatch(login(token));
-        alert('로그인 성공');
-        navigate('/')
-      } else{
-        alert('로그인 실패');
-      }
+      const loginData = { name, password };
+      await dispatch(login(loginData)).unwrap(); // `unwrap`를 사용하여 Promise를 처리합니다.
+      navigate('/'); // 성공 시 홈으로 이동
+      alert("로그인 성공");
     } catch (error) {
       console.error('로그인 실패:', error);
-      alert('로그인 실패'+error.message);
+      alert('로그인 실패' + error.message);
     }
   };
 
