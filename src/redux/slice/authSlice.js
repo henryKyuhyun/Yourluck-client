@@ -1,6 +1,6 @@
 // src/redux/slice/authSlice.js
 import { createSlice } from '@reduxjs/toolkit';
-import { login } from '../authAction'; // login thunk를 임포트합니다.
+import { login } from '../authAction';
 
 const initialState = {
   isAuthenticated: false,

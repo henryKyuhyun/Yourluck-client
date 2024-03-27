@@ -1,3 +1,4 @@
+import UserLogout from "../User/UserLogout";
 import { LinkForMenu, LinkWithoutBackground, MenuCenter, MenuNav, MenuRight } from "../styles/BannerStyle";
 import { useSelector } from "react-redux";
 
@@ -24,7 +25,11 @@ export default function MenuBar() {
 
         <MenuRight>
         {isAuthenticated ? (
-          <p>{user.username}님 반갑습니다!</p> 
+          <>
+          <p>{user.username}님 반갑습니다!</p>
+          <UserLogout />
+          </>
+
         ) : (
           <>
             <LinkForMenu to="/join">
